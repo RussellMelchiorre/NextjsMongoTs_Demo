@@ -1,0 +1,40 @@
+# --- Node.js ---
+node_modules/
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# --- Next.js ---
+.next/
+out/
+.vercel/
+.DS_Store
+
+# --- TypeScript ---
+*.tsbuildinfo
+
+# --- OS / Editor Specific ---
+.vscode/
+.idea/
+*.swp
+Thumbs.db
+*.log
+
+# --- Build Output ---
+dist/
+build/
+coverage/
+
+# --- Tailwind / PostCSS ---
+*.css.map
+*.postcss-cache
+
+# --- Miscellaneous ---
+*.local
+*.sublime-project
+*.sublime-workspace
+
+# Optional: ignore system-wide files
+Desktop.ini
