@@ -3,7 +3,7 @@
 import { useState } from 'react'
 
 // Item structure
-type Item = { name: string; type: string }
+type Item = { name: string; location: string }
 
 // Page component
 export default function Home({ initialItems }: { initialItems: Item[] }) {
@@ -12,27 +12,28 @@ export default function Home({ initialItems }: { initialItems: Item[] }) {
 
     // State for form inputs
     const [name, setName] = useState('')
-    const [itemType, setItemType] = useState('')
+    const [location, setLocation] = useState('')
+
 
     // State for sorting
-    const [sortField, setSortField] = useState<'date' | 'name' | 'type'>('date')
+    const [sortField, setSortField] = useState<'date' | 'name' | 'location'>('name')
 
     // Add item to list
     async function addItem(e: React.FormEvent) {
-        e.preventDefault()
 
         const res = await fetch('/api/items', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, type: itemType }),
+            body: JSON.stringify({ name, location }),
         })
 
         if (res.ok) {
             const newItem = await res.json() as Item
             setItems(prev => [...prev, newItem])
             setName('')
-            setItemType('')
+            setLocation('')
         }
+
     }
 
     // Sort items
@@ -41,8 +42,8 @@ export default function Home({ initialItems }: { initialItems: Item[] }) {
         if (sortField === 'name') {
             return copy.sort((a, b) => a.name.localeCompare(b.name))
         }
-        if (sortField === 'type') {
-            return copy.sort((a, b) => a.type.localeCompare(b.type))
+        if (sortField === 'location') {
+            return copy.sort((a, b) => a.location.localeCompare(b.location))
         }
         return copy
     })()
@@ -64,12 +65,13 @@ export default function Home({ initialItems }: { initialItems: Item[] }) {
                     className="px-3 py-2 border rounded-md w-full sm:w-auto"
                 />
                 <input
-                    placeholder="Type"
-                    value={itemType}
-                    onChange={e => setItemType(e.target.value)}
+                    placeholder="Location"
+                    value={location}
+                    onChange={e => setLocation(e.target.value)}
                     required
                     className="px-3 py-2 border rounded-md w-full sm:w-auto"
                 />
+
                 <button
                     type="submit"
                     className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
@@ -87,7 +89,7 @@ export default function Home({ initialItems }: { initialItems: Item[] }) {
                     Sort by Name
                 </button>
                 <button
-                    onClick={() => setSortField('type')}
+                    onClick={() => setSortField('location')}
                     className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition"
                 >
                     Sort by Type
@@ -106,10 +108,21 @@ export default function Home({ initialItems }: { initialItems: Item[] }) {
                     {sortedItems.map((it, i) => (
                         <li key={i} className="flex justify-between text-xl border-b-2 pb-2">
                             <span className="text-blue-600 font-semibold">{it.name}</span>
-                            <span className="text-green-600 italic">{it.type}</span>
+                            <span className="text-green-600 italic">{it.location}</span>
                         </li>
                     ))}
                 </ul>
+            </div>
+
+           
+            <div className="mt-10 w-full max-w-5xl mx-auto">
+                <iframe
+                    src="/map.html"
+                    width="100%"
+                    height="500"
+                    style={{ border: 'none' }}
+                    title="Mapbox Map"
+                />
             </div>
         </div>
     )
